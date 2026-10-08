@@ -174,7 +174,7 @@
  Empresa "1" -- "0..*" ServicioDomiciliario : ofrece
  EquipoAtencion "0..1" o-- "0..*" ProfesionalSalud : agrupa
  Paciente "1" -- "0..*" ServicioDomiciliario : solicita
- ProfesionalSalud "0..*" -- "0..1" ServicioDomiciliario : atiende
+ ProfesionalSalud "0..1" -- "0..*" ServicioDomiciliario : atiende
  ServicioDomiciliario "1" *-- "0..1" AtencionMedica : genera
  AtencionMedica "1" *-- "0..*" MedicionSignosVitales : contiene
  ServicioDomiciliario --> EstadoServicio
