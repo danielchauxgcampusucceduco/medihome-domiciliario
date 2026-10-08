@@ -1,0 +1,195 @@
+@startuml
+ top to bottom direction
+ skinparam classAttributeIconSize 0
+ skinparam shadowing false
+ skinparam linetype ortho
+ skinparam class {
+   BackgroundColor #7CCDF0
+   BorderColor #111111
+   ArrowColor #111111
+   FontColor #111111
+   HeaderBackgroundColor #70C5E8
+ }
+ skinparam packageStyle rectangle
+ hide empty members
+ title MediHome | Diagrama de clases
+
+ class Empresa {
+   - identificacion: String
+   - nombre: String
+   - correo: String
+   - telefono: String
+   - direccionPrincipal: String
+   --
+   + Empresa(identificacion: String, nombre: String, correo: String, telefono: String, direccionPrincipal: String)
+   + getIdentificacion(): String
+   + getNombre(): String
+   + setNombre(nombre: String): void
+   + getCorreo(): String
+   + setCorreo(correo: String): void
+   + getTelefono(): String
+   + setTelefono(telefono: String): void
+   + getDireccionPrincipal(): String
+   + setDireccionPrincipal(direccion: String): void
+   + registrarProfesional(profesional: ProfesionalSalud): void
+   + registrarEquipo(equipo: EquipoAtencion): void
+   + registrarServicio(servicio: ServicioDomiciliario): void
+   + getProfesionales(): List~ProfesionalSalud~
+   + getEquipos(): List~EquipoAtencion~
+   + getServicios(): List~ServicioDomiciliario~
+ }
+
+ abstract class Usuario {
+   - identificacion: String
+   - nombre: String
+   - correo: String
+   --
+   # Usuario(identificacion: String, nombre: String, correo: String)
+   + getIdentificacion(): String
+   + getNombre(): String
+   + setNombre(nombre: String): void
+   + getCorreo(): String
+   + setCorreo(correo: String): void
+   + notificar(mensaje: String): void
+ }
+
+ class Paciente {
+   - telefono: String
+   - direccion: String
+   --
+   + Paciente(identificacion: String, nombre: String, correo: String, telefono: String, direccion: String)
+   + getTelefono(): String
+   + setTelefono(telefono: String): void
+   + getDireccion(): String
+   + setDireccion(direccion: String): void
+   + solicitarServicio(servicio: ServicioDomiciliario): void
+   + getServicios(): List~ServicioDomiciliario~
+   + notificar(mensaje: String): void
+ }
+
+ class ProfesionalSalud {
+   - numeroRegistroProfesional: String
+   - especialidad: String
+   --
+   + ProfesionalSalud(identificacion: String, nombre: String, correo: String, registro: String, especialidad: String)
+   + getNumeroRegistroProfesional(): String
+   + setNumeroRegistroProfesional(registro: String): void
+   + getEspecialidad(): String
+   + setEspecialidad(especialidad: String): void
+   + getEquipoActual(): EquipoAtencion
+   + getServiciosAsignados(): List~ServicioDomiciliario~
+   + registrarAtencion(servicio: ServicioDomiciliario, inicio: LocalDateTime): AtencionMedica
+   + estaDisponible(fechaHora: LocalDateTime): boolean
+   + notificar(mensaje: String): void
+ }
+
+ class EquipoAtencion {
+   - codigo: String
+   - nombre: String
+   - zonaCobertura: String
+   --
+   + EquipoAtencion(codigo: String, nombre: String, zona: String)
+   + getCodigo(): String
+   + getNombre(): String
+   + setNombre(nombre: String): void
+   + getZonaCobertura(): String
+   + setZonaCobertura(zona: String): void
+   + getProfesionales(): List~ProfesionalSalud~
+   + agregarProfesional(profesional: ProfesionalSalud): void
+   + retirarProfesional(profesional: ProfesionalSalud): void
+ }
+
+ class ServicioDomiciliario {
+   - codigo: String
+   - fechaProgramada: LocalDateTime
+   - direccionAtencion: String
+   - motivo: String
+   - estado: EstadoServicio
+   --
+   + ServicioDomiciliario(codigo: String, fecha: LocalDateTime, direccion: String, motivo: String, paciente: Paciente)
+   + getCodigo(): String
+   + getFechaProgramada(): LocalDateTime
+   + getDireccionAtencion(): String
+   + setDireccionAtencion(direccion: String): void
+   + getMotivo(): String
+   + setMotivo(motivo: String): void
+   + getEstado(): EstadoServicio
+   + getPaciente(): Paciente
+   + getProfesional(): ProfesionalSalud
+   + getAtencion(): AtencionMedica
+   + programar(profesional: ProfesionalSalud, fecha: LocalDateTime): void
+   + iniciarAtencion(inicio: LocalDateTime): AtencionMedica
+   + finalizar(fin: LocalDateTime, observaciones: String, recomendaciones: String): void
+   + cancelar(): void
+ }
+
+ class AtencionMedica {
+   - fechaHoraInicio: LocalDateTime
+   - fechaHoraFin: LocalDateTime
+   - observaciones: String
+   - recomendaciones: String
+   --
+   ~ AtencionMedica(servicio: ServicioDomiciliario, profesional: ProfesionalSalud, inicio: LocalDateTime)
+   + getServicio(): ServicioDomiciliario
+   + getProfesional(): ProfesionalSalud
+   + getFechaHoraInicio(): LocalDateTime
+   + getFechaHoraFin(): LocalDateTime
+   + getObservaciones(): String
+   + getRecomendaciones(): String
+   + getMediciones(): List~MedicionSignosVitales~
+   + registrarMedicion(medicion: MedicionSignosVitales): void
+   ~ cerrar(fin: LocalDateTime, observaciones: String, recomendaciones: String): void
+ }
+
+ class MedicionSignosVitales {
+   - fechaHora: LocalDateTime
+   - temperatura: double
+   - frecuenciaCardiaca: int
+   - presionSistolica: int
+   - presionDiastolica: int
+   - saturacionOxigeno: double
+   --
+   + MedicionSignosVitales(fechaHora: LocalDateTime, temperatura: double, frecuencia: int, sistolica: int, diastolica: int, saturacion: double)
+   + getFechaHora(): LocalDateTime
+   + getTemperatura(): double
+   + getFrecuenciaCardiaca(): int
+   + getPresionSistolica(): int
+   + getPresionDiastolica(): int
+   + getSaturacionOxigeno(): double
+   + resumen(): String
+ }
+
+ enum EstadoServicio {
+   SOLICITADO
+   PROGRAMADO
+   EN_ATENCION
+   FINALIZADO
+   CANCELADO
+ }
+
+ Usuario <|-- Paciente
+ Usuario <|-- ProfesionalSalud
+ Empresa "1" -- "0..*" ProfesionalSalud : registra
+ Empresa "1" -- "0..*" EquipoAtencion : organiza
+ Empresa "1" -- "0..*" ServicioDomiciliario : ofrece
+ EquipoAtencion "0..1" o-- "0..*" ProfesionalSalud : agrupa
+ Paciente "1" -- "0..*" ServicioDomiciliario : solicita
+ ProfesionalSalud "0..*" -- "0..1" ServicioDomiciliario : atiende
+ ServicioDomiciliario "1" *-- "0..1" AtencionMedica : genera
+ AtencionMedica "1" *-- "0..*" MedicionSignosVitales : contiene
+ ServicioDomiciliario --> EstadoServicio
+
+ note right of ServicioDomiciliario
+   Reglas de estado:
+   SOLICITADO -> PROGRAMADO o CANCELADO
+   PROGRAMADO -> EN_ATENCION o CANCELADO
+   EN_ATENCION -> FINALIZADO
+   Programado, en atención y finalizado requieren profesional.
+   El estado cambia por operaciones del servicio.
+ end note
+
+ note bottom of EquipoAtencion
+   Se muestra el equipo actual del profesional.
+   Si se requiere historial, modelar AsignacionEquipo con fechas.
+ end note
+@enduml
