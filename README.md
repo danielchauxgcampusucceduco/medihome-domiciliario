@@ -13,7 +13,7 @@ Taller de Diseño y Programación. Aplicación de consola en Java para administr
 
 - Imagen exportada desde VPasCode, herramienta de diagramas de Visual Paradigm: [`diagrama/Medihome-Clases.png`](diagrama/Medihome-Clases.png)
 - Fuente editable PlantUML: [`diagrama/Medihome-Clases.puml`](diagrama/Medihome-Clases.puml)
-- Proyecto Visual Paradigm (`.vpp`): pendiente de guardar desde VP Desktop/VP Online.
+- Proyecto editable de Visual Paradigm Community Edition: [`diagrama/MediHome-VisualParadigm.vpp`](diagrama/MediHome-VisualParadigm.vpp)
 
 ## Modelo
 
